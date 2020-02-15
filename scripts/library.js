@@ -32,13 +32,10 @@ res.Item = {
 				}
 			}
 		}
-		print("============")
-		const data = new PixmapTextureData(newTexture, null, true, false, true);
-		print("Data " + data + " - " + data.getWidth() + "x" + data.getHeight())
-		const texture = new Texture(data);
-		print("Texture " + texture + " - " + texture.getWidth() + "x" + texture.getHeight())
-		const region = new TextureRegion(texture);
-		this.region = region;
+
+		// Store it as the items icon
+		const texture = new Texture(new PixmapTextureData(newTexture, null, true, false, true));
+		this.region = new TextureRegion(texture);
 	},
 
 	icon(icon){
