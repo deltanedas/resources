@@ -11,7 +11,7 @@ res.Item = {
 		const color = this.color;
 		var mask = res.masks[this.mask];
 		if(mask === undefined){ // Cache mask textures to save cpu
-			mask = Core.atlas.getPixmap("resources-" + this.mask);
+			mask = Core.atlas.getPixmap(this.mask);
 			res.masks[this.mask] = mask;
 		}
 
@@ -52,11 +52,11 @@ res.add = function(name, mask, color, def){
 		for(itemname in items){
 			obj = items[itemname];
 			color = obj;
-			mask = "ingot-shiny";
+			mask = "resoures-ingot-shiny";
 			def = {};
 			if(typeof(obj) === "object"){
 				color = obj.color || error;
-				mask = obj.mask || "ingot-shiny",
+				mask = obj.mask || "resoures-ingot-shiny",
 				def = obj.def || def;
 			}
 

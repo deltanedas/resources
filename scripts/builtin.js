@@ -3,7 +3,7 @@ const builtin = {
 	tin: "#9fb6cb",
 	solder: {
 		color: "#dad6d4",
-		mask: "ingot-dull"
+		mask: "resources-ingot-dull"
 	}
 };
 

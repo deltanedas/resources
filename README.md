@@ -20,7 +20,7 @@ res.add("cool-alloy", "ingot-alloy", Color.valueOf("#00aaff"), {});
 // Or JSON style
 res.add({
 	"cool-alloy": {
-		"mask": "ingot-alloy",
+		"mask": "resources-ingot-alloy",
 		"color": "#00aaff"
 	}
 });
@@ -45,7 +45,7 @@ For JSON style item adding, the object argument must contain any number of objec
 ```json
 "itemname": {
 	"color": "color",
-	"mask": "mask-texture",
+	"mask": "modname-mask-texture",
 	"def": {
 		"extra": "fields for Item"
 	}
@@ -56,11 +56,14 @@ OR
 "itemname": "color"
 ```
 
-The mask may be one of the following:
+The mask may be one of the following builtin masks, prefixed with `resources-`:
 * ingot-alloy (Surge Alloy based)
 * ingot-dull (Lead based)
 * ingot-rare (Titanium based)
 * ingot-shiny (Copper based, default)
+* dust (Sand based)
+* clump (Coal based)
+or your own.
 
 Color may be:
 * #rrggbbaa
