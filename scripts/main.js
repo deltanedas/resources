@@ -1,5 +1,5 @@
 if (this.global.resources === undefined) {
 	this.global.resources = {};
-	require("library");
+	require("resources/library");
 	require("builtin");
 }
