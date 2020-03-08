@@ -52,11 +52,11 @@ res.add = function(name, mask, color, def){
 		for(itemname in items){
 			obj = items[itemname];
 			color = obj;
-			mask = "resoures-ingot-shiny";
+			mask = "resources-ingot-shiny";
 			def = {};
 			if(typeof(obj) === "object"){
 				color = obj.color || error;
-				mask = obj.mask || "resoures-ingot-shiny",
+				mask = obj.mask || "resources-ingot-shiny",
 				def = obj.def || def;
 			}
 
