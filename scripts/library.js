@@ -6,6 +6,14 @@ const error = Color.valueOf("#ff00ff");
 res.masks = {};
 
 res.Item = {
+	setTexture(pixmap) {
+		this.pixmap = pixmap;
+		const texture = new Texture(new PixmapTextureData(pixmap, null, true, false, true));
+		this.region = Core.atlas.addRegion(this.name, new TextureRegion(texture));
+	},
+	getTexture() {
+		return this.pixmap;
+	},
 	load(){
 		// Colorize the mask with this.color.
 		const color = this.color;
@@ -22,20 +30,36 @@ res.Item = {
 			for(y = 0; y < 32; y++){
 				pixel.set(mask.getPixel(x, y));
 				if(pixel.a > 0){
-					//print("Pixel is " + pixel);
-					pixel.r *= color.r;
-					pixel.g *= color.g;
-					pixel.b *= color.b;
+					pixel.mul(color);
 					pixel.a *= color.a; // For ghost items :o
-					//print("Pixel is now " + pixel);
 					newTexture.draw(x, y, pixel);
 				}
 			}
 		}
 
+		if (this.layers) {
+			var layers = [];
+			for (var i in this.layers) {
+				layers[i] = Core.atlas.getPixmap(this.layers[i]);
+			}
+
+			var lPix = new Color();
+			for (x = 0; x < 32; x++) {
+				for (y = 0; y < 32; y++) {
+					pixel.set(newTexture.getPixel(x, y));
+					for (i in layers) {
+						if (pixel.a < 1) {
+							lPix.set(layers[i].getPixel(x, y));
+							pixel.add(lPix);
+							pixel.a += lPix.a;
+						}
+					}
+					newTexture.draw(x, y, pixel);
+				}
+			}
+		}
 		// Store it as the items icon
-		const texture = new Texture(new PixmapTextureData(newTexture, null, true, false, true));
-		this.region = new TextureRegion(texture);
+		this.setTexture(newTexture);
 	},
 
 	icon(icon){
@@ -67,7 +91,7 @@ res.add = function(name, mask, color, def){
 				}else{
 					color = Colors.get(color); // "color": "royal"
 				}
-			}else if (typeof(color) !== "arc.graphics.Color"){
+			}else if (color instanceof Color){
 				color = new Color(color); // "color": 123456
 			}
 
@@ -90,4 +114,5 @@ res.add = function(name, mask, color, def){
 	return item;
 }
 
-this.global.resources = res;
+module.exports = res
+this.global.resources = res
