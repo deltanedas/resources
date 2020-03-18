@@ -77,4 +77,5 @@ If you see a color of #FF00FF, (#FF00FFFF in rgba) it means that your colour fai
 
 add(String, String, Color, Object) returns the newly created Item.
 
-add(Object<itemname, Object>) returns an object of <itemname> -> Item
+add(Object<itemname, Object>) returns an object of *itemname* -> Item
+
