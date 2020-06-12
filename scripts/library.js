@@ -9,7 +9,10 @@ res.Item = {
 	setTexture(pixmap) {
 		this.pixmap = pixmap;
 		const texture = new Texture(new PixmapTextureData(pixmap, null, true, false, true));
-		this.region = Core.atlas.addRegion(this.name, new TextureRegion(texture));
+		const item = this;
+		Core.app.post(run(() => {
+			item.region = Core.atlas.addRegion(this.name, new TextureRegion(texture))
+		}));
 	},
 	getTexture() {
 		return this.pixmap;
