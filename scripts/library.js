@@ -1,3 +1,19 @@
+/*
+	Copyright (c) DeltaNedas 2020
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 const PixmapTextureData = Packages.arc.graphics.gl.PixmapTextureData;
 const res = this.global.resources;
 
@@ -6,19 +22,10 @@ const error = Color.valueOf("#ff00ff");
 res.masks = {};
 
 res.Item = {
-	setTexture(pixmap) {
-		this.pixmap = pixmap;
-		const texture = new Texture(new PixmapTextureData(pixmap, null, true, false, true));
-		const item = this;
-		Core.app.post(run(() => {
-			item.region = Core.atlas.addRegion(this.name, new TextureRegion(texture))
-		}));
-	},
-	getTexture() {
-		return this.pixmap;
-	},
-	load(){
-		// Colorize the mask with this.color.
+	createIcons(packer) {
+		this.super$createIcons(packer);
+
+		// Get the mas
 		const color = this.color;
 		var mask = res.masks[this.mask];
 		if(mask === undefined){ // Cache mask textures to save cpu
@@ -26,7 +33,7 @@ res.Item = {
 			res.masks[this.mask] = mask;
 		}
 
-		// Actually colour the mask, pixel by pixel
+		// Colour the mask, pixel by pixel
 		var newTexture = new Pixmap(32, 32);
 		var pixel = new Color(), x, y;
 		for(x = 0; x < 32; x++){
@@ -40,6 +47,7 @@ res.Item = {
 			}
 		}
 
+		// Do any extra processing
 		if (this.layers) {
 			var layers = [];
 			for (var i in this.layers) {
@@ -61,15 +69,11 @@ res.Item = {
 				}
 			}
 		}
-		// Store it as the items icon
-		this.setTexture(newTexture);
+		// Add it to the atlas
+		packer.add(MultiPacker.PageType.main, "item-" + this.name, newTexture);
 	},
-
-	icon(icon){
-		return this.region;
-	}
+	type: ItemType.material
 };
-res.Item.type = ItemType.material;
 
 res.add = function(name, mask, color, def){
 	if(typeof(name) === "object"){
@@ -109,9 +113,9 @@ res.add = function(name, mask, color, def){
 	}
 
 	var itemDef = Object.create(res.Item);
-	itemDef.mask = mask;
 	Object.assign(itemDef, def);
 	var item = extendContent(Item, name, itemDef);
+	item.mask = mask;
 	item.color = color;
 	item.type = itemDef.type;
 	return item;
